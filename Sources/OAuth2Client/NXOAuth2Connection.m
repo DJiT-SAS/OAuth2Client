@@ -381,7 +381,7 @@ sendingProgressHandler:(NXOAuth2ConnectionSendingProgressHandler)aSendingProgres
     NSLog(@"%.0fms (RESP) - %@", -[startDate timeIntervalSinceNow]*1000.0, [self descriptionForRequest:request]);
 #endif
     
-    response = theResponse;
+    response = [theResponse retain];
     
     if (savesData) {
         if (!data) {
