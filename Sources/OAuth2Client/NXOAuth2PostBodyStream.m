@@ -36,7 +36,7 @@
         streamIndex = 0;
         
         if (postParameters) {
-            contentStreams = [[self streamsForParameters:postParameters contentLength:&numBytesTotal] retain];
+            contentStreams = [self streamsForParameters:postParameters contentLength:&numBytesTotal];
         } else {
             contentStreams = [[NSArray alloc] init];
         }
