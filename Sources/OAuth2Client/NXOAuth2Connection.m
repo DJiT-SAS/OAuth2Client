@@ -89,10 +89,6 @@ sendingProgressHandler:(NXOAuth2ConnectionSendingProgressHandler)aSendingProgres
     sendConnectionDidEndNotification = NO;
 
     [connection cancel];
-    
-#if (NXOAuth2ConnectionDebug)
-    [startDate release];
-#endif
 }
 
 
@@ -197,13 +193,13 @@ sendingProgressHandler:(NXOAuth2ConnectionSendingProgressHandler)aSendingProgres
         [startRequest setValue:client.userAgent forHTTPHeaderField:@"User-Agent"];
     }
     
+    if (client.acceptType) {
+        [startRequest setValue:client.acceptType forHTTPHeaderField:@"Accept"];
+    }
+    
     NSURLConnection *aConnection = [[NSURLConnection alloc] initWithRequest:startRequest delegate:self startImmediately:NO];    // don't start yet
     [aConnection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];    // let's first schedule it in the current runloop. (see http://github.com/soundcloud/cocoa-api-wrapper/issues#issue/2 )
     [aConnection start];    // now start
-    
-#if (NXOAuth2ConnectionDebug)
-    [startDate release]; startDate = [[NSDate alloc] init];
-#endif
     
     if (!sendConnectionDidEndNotification) [[NSNotificationCenter defaultCenter] postNotificationName:NXOAuth2ConnectionDidStartNotification object:self];
     sendConnectionDidEndNotification = YES;

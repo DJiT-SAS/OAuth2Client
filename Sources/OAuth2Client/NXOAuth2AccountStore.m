@@ -205,6 +205,12 @@ NSString * const kNXOAuth2AccountStoreAccountType = @"kNXOAuth2AccountStoreAccou
     [client authenticateWithAssertionType:assertionType assertion:assertion];
 }
 
+- (void)requestClientCredentialsAccessWithType:(NSString *)accountType;
+{
+    NXOAuth2Client *client = [self pendingOAuthClientForAccountType:accountType];
+    [client authenticateWithClientCredentials];
+}
+
 - (void)removeAccount:(NXOAuth2Account *)account;
 {
     if (account) {
@@ -464,6 +470,12 @@ NSString * const kNXOAuth2AccountStoreAccountType = @"kNXOAuth2AccountStoreAccou
     }
     
     NXOAuth2Account *account = [[NXOAuth2Account alloc] initAccountWithOAuthClient:client accountType:accountType];
+    
+    [self addAccount:account];
+}
+
+- (void)addAccount:(NXOAuth2Account *)account;
+{
     @synchronized (self.accountsDict) {
         [self.accountsDict setValue:account forKey:account.identifier];
         [NXOAuth2AccountStore storeAccountsInDefaultKeychain:self.accountsDict];
